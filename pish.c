@@ -7,7 +7,10 @@
 int main() {
 
   //while the user says y to entering the commands we execute the loop
+  
   //break down the command and uses the redirection tokens (<, >, >>, |)
+      //it uses the fork() and the exec() function to execute the commands
+  
   //at the end of the loop it would ask again if the user wants to enter a command
 
 
