@@ -13,93 +13,64 @@ struct command {
   int argc; //number of arguments passed in
   char *argv[128]; //list of arguments
 };
-// int parse(const char *cmdline, struct command *cmd) {
-//   static char = array[1024];
-//   char *line = array;
-//   char *token = strtok(cmdLine, " ");
-//   int is_bg;
 
-//   if(cmdline == NULL) {
-//     perror("command line is NULL\n");
-//   }
-//   cmd->argc = 0;
-//   int i = 0;
-
-//   while(token != NULL) {
-//     cmd->argv[i] = token;
-//     token = strtok(NULL, " ");
-//     ++i;
-//   }
-//   cmd->argc = i;
-//   cmd->argv[cmd->argc] = NULL;
-
-//   if(cmd->argc == 0) {
-//     return 1;
-//   }
-
-//   if((is_bg = (*cmd->argv[cmd->argc-1] == '&')) != 0) {
-//     cmd->argv[--cmd->argc] = NULL;
-//   }
-//   return is_bg;
-// }
-
-char* readline() {
-  char *line = NULL;
-  size_t buflen = 0;
-  getline(&line, &buflen, stdin);
-  return line;
+void checkRedirection(char *buffer) {
+  for(int i = 0; i < sizeof(buffer); i++) {
+    char c = buffer[i];
+    if(&c == "<"); {
+      printf("Redirect to standard Input");
+      //add a method redirectionToStdIn;
+    }
+    if(&c == ">") {
+      printf("Redirect the standard output to a file");
+    //add a method that creates and writes to a file. Overrides the contents of a file
+    }
+    if(&c == ">") {
+	if(&buffer[i+1] == ">") {
+      		printf("Redirect output to file without overriding contents");
+	}
+    }
+    //add a method that adds to contents of a file.
+  }
 }
 
-// void eval(char *cmdLine) {
-//   int bg;
-//   struct command cmd;
-
-//   bg = parse(cmdLine, &cmd);
-
-//   if(bg == -1) {
-//     return;
-//   }
-
-//   if(cmd.argv[0] == NULL) {
-//     return;
-//   }
-//   runSystemCommand(&cmd, bg);
-  
-// }
-// void runSystemCommand(struct command *cmd, int bg) {
-//   pid_t childPid;
-//   char* path = "./bin/";
-//   char progpath[20];
-
-//   strcpy(progpath, path);
-//   strcat(progpath, cmd->argv[0]);
-
-//   for(int i = 0; i < strlen(progpath); i++) {
-//     if(progpath[i] == "\n") {
-//       progpath[i] = "\0";
-//     }
-//   }
-//   if((childPid =fork()) < 0) {
-//     perror("fork() error");
-//   }
-//   else if(childPid == 0) {
-//     if(execvp(cmd->argv[0], cmd->argv) < 0) {
-//       printf("command not found\n");
-//       exit(0);
-//     }
-//   }
-// }
 int main(int argc, char* argv[]) {
   while (1) {
+    char buffer[100];
     char* cmdLine;
-    printf("%s", prompt);
-    cmdLine = readline();
-    if(strcmp(cmdLine, "quit") == 0){
-      printf("You have quitted the process");
-      exit(1);
+    int pid = vfork();
+    //printf("%s", prompt);
+    //scanf("%[^\n]%*c", buffer);
+    //printf("Buffer: %s\n", buffer);
+
+    //cmdLine = readline();
+    //execl("/bin/sh", "/bin/sh", "-c", buffer, 0);
+    //int pid = vfork();
+    //if(strcmp(buffer, "quit") == 0){
+      //printf("You have quitted the process\n");
+      //exit(1);
+    //}
+    //printf("Some instructions at beginning\n");
+     if(strcmp(buffer, "quit") == 0){
+         printf("You have quitted the process\n");
+         exit(1);
+      }
+    if(!vfork()){
+      // child
+      //execlp("ls","ls", "-l", NULL); // child is replaced
+      printf("%s", prompt);
+      scanf("%[^\n]%*c", buffer);
+      if(strcmp(buffer, "quit") != 0){
+         printf("Your command: %s\n", buffer);
+	execl("/bin/sh", "/bin/sh", "-c", buffer, 0);
+	//exit(1);
+	 }
+      execl("/bin/sh", "/bin/sh", "-c", buffer, 0);
+      checkRedirection(buffer);
     }
-    // cmdLine(strlen(cmdLine) - 1) = "\0";
-    // eval(cmdLine);
-  }
+    //printf("%s", prompt);
+   // parent continues after child is gone
+    //printf("Other instructions\n");
+      }
   return 1;
 }
