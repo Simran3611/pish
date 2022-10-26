@@ -1,1 +1,6 @@
 echo "you are entering the pish terminal"
+
+ls | tee list
+cat pish.c < inputRedir.txt
+cat pish.c > inputRedir.txt
+cat pish.c >> inputRedir.txt
