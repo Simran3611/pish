@@ -10,3 +10,6 @@ rm outputRedir.txt
 rm outputAppend.txt
 rm | tee list
 ls
+clear
+cd
+
