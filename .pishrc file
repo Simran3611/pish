@@ -1,11 +1,12 @@
 echo "you are entering the pish terminal"
 
-ls | tee list
 cat pish.c < inputRedir.txt
 cat pish.c > outputRedir.txt
 cat pish.c >> outputAppend.txt
+ls | tee list
 ls
 rm inputRedir.txt
 rm outputRedir.txt
 rm outputAppend.txt
+rm | tee list
 ls
