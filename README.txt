@@ -1,4 +1,3 @@
-Partner: Paris Sommerville
 
 This is the creation of the shell. Most of the commands do work. Here is an example of commands to try in order to check if it works or not.
 
